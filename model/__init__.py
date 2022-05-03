@@ -1,1 +1,1 @@
-from model.facemasknet21 import FaceMaskNet
+from model.facemasknet import FaceMaskNet
