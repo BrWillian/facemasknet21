@@ -64,7 +64,7 @@ class SaveBaseModel():
              Salva em tsv
         '''
         df = self.get_db_embeddings()
-        df.to_csv('bd.tsv', sep='\t', index=False)
+        df.to_csv('db.tsv', sep='\t', index=False)
 
     def _load_model_facemasknet(self):
         '''
