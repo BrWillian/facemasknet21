@@ -6,7 +6,7 @@ from model.facemasknet import FaceMaskNet
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 
-class SaveBaseModel():
+class SaveBaseModel(object):
     '''
         Classe responsavel por salvar toda a base de dados contendo as matricas de cada face.
     '''
@@ -35,9 +35,9 @@ class SaveBaseModel():
 
         return train_generator
 
-    def get_db_embeddings(self):
+    def get_db_embeddings(self, **kwargs):
         '''
-            Faz o predição das imagens, carrega e rotula todo o dataset.
+            Faz o predição das imagens, carrega e rotula todo o dataset, transforma para dataframe.
         '''
         classes_names = self._get_class_name()
         predicted = self._load_model_facemasknet()
@@ -47,7 +47,12 @@ class SaveBaseModel():
             _embeddings = list(_embeddings)
             self._db.append([classes_names[int(*_class)], int(*_class), *_embeddings])
 
-        return pd.DataFrame(self._db)
+        df = pd.DataFrame(self._db)
+
+        if kwargs.get("save"):
+            df.to_csv('db.tsv', sep='\t', index=False)
+
+        return df
 
     def _get_class_name(self):
         '''
@@ -58,13 +63,6 @@ class SaveBaseModel():
                 self._classes_names.append(path)
 
         return self._classes_names
-
-    def save_embeddings(self):
-        '''
-             Salva em tsv
-        '''
-        df = self.get_db_embeddings()
-        df.to_csv('db.tsv', sep='\t', index=False)
 
     def _load_model_facemasknet(self):
         '''
@@ -79,5 +77,4 @@ class SaveBaseModel():
 
 if __name__ == "__main__":
     SaveBaseModel = SaveBaseModel(directory='/home/willian/Downloads/post-processed/', path_model='weights/facemasknet.h5')
-    SaveBaseModel.get_db_embeddings()
-    SaveBaseModel.save_embeddings()
+    SaveBaseModel.get_db_embeddings(save=True)
