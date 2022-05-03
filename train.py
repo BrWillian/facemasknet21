@@ -11,7 +11,8 @@ train_generator = train_datagen.flow_from_directory(
     '/home/willian/Downloads/post-processed',
     target_size=(227, 227),
     batch_size=32,
-    class_mode='sparse'
+    class_mode='sparse',
+    shuffle=False
 )
 
 if __name__ == "__main__":
@@ -32,7 +33,7 @@ if __name__ == "__main__":
         with strategy.scope():
             model = FaceMaskNet()
             model.summary()
-            model.compile(optimizer=optimizer, loss=tfa.losses.TripletHardLoss())
+            model.compile(optimizer=optimizer, loss=tfa.losses.TripletSemiHardLoss())
     else:
         model = FaceMaskNet()
         model.summary()

@@ -30,7 +30,8 @@ class SaveBaseModel(object):
             self._directory,
             target_size=(227, 227),
             batch_size=1,
-            class_mode='sparse'
+            class_mode='sparse',
+            shuffle=False
         )
 
         return train_generator
